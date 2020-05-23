@@ -1,0 +1,17 @@
+version: "3.1"
+services:
+  postgres:
+    image: postgres:11
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+  flyway:
+    image: flyway
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: '-url=jdbc:postgresql://postgres/postgres -user=postgres -password=password -connectRetries=60 migrate'
+    depends_on:
+      - postgres
